@@ -11,11 +11,6 @@ export default function Stats({ username, error, setError }) {
       setIsLoading(false);
       setError("Please enter a username!");
     } else {
-      window.history.replaceState(
-        { pathname: username },
-        `${username} Stats`,
-        `/${username}`
-      );
       try {
         const response = await axios.get(
           `http://localhost:3001/stats/${username}`

@@ -15,7 +15,12 @@ function App() {
           path="/"
           element={<Home username={username} setUsername={setUsername} />}
         ></Route>
-        <Route path="/stats/:name" element={<Stats />}></Route>
+        <Route
+          path="/stats/:name"
+          element={
+            <Stats username={username} error={error} setError={setError} />
+          }
+        ></Route>
       </Routes>
     </div>
   );
