@@ -18,7 +18,7 @@ export default function Stats({ username, error, setError }) {
       );
       try {
         const response = await axios.get(
-          `https://immediate-iodized-cockatoo.glitch.me/stats/${username}`
+          `http://localhost:3001/stats/${username}`
         );
         const data = await response.data;
         if (data.hasOwnProperty("error")) {
