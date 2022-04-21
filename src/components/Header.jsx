@@ -21,11 +21,11 @@ export default function Header({ stats, username, setUsername, leaderboards }) {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
-                        className="mx-auto my-2 my-lg-0"
+                        className={(location.pathname !== '/' ? "mx-auto" : "ms-auto") + " my-2 my-lg-0"}
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <NavDropdown title="Leaderboards" id="navbarScrollingDropdown">
+                        {location.pathname !== '/' ? <NavDropdown title="Leaderboards" id="navbarScrollingDropdown">
                             {leaderboards ? [
 
                                 leaderboards.map((leaderboard, index) => (
@@ -39,7 +39,22 @@ export default function Header({ stats, username, setUsername, leaderboards }) {
 
                             ] : <NavDropdown.Item>Loading....</NavDropdown.Item>
                             }
-                        </NavDropdown>
+                        </NavDropdown> : <NavDropdown alignRight align="end" title="Leaderboards" id="navbarScrollingDropdown">
+                            {leaderboards ? [
+
+                                leaderboards.map((leaderboard, index) => (
+                                    <NavDropdown.Item key={index} onClick={() => {
+                                        navigate(`/leaderboards/${leaderboard.id}`);
+                                    }}>
+                                        {leaderboard.name}
+                                    </NavDropdown.Item>
+
+                                ))
+
+                            ] : <NavDropdown.Item>Loading....</NavDropdown.Item>
+                            }
+                        </NavDropdown>}
+
                     </Nav>
                     {location.pathname !== '/' && (
                         <Form className="d-flex" onSubmit={

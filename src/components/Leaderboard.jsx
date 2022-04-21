@@ -13,7 +13,16 @@ const Leaderboard = ({ leaderboards, data, title }) => {
 
     const columns = [
         { field: 'id', headerName: 'Rank', flex: 0.3 },
-        { field: 'name', headerName: 'Name', flex: 1 },
+        {
+            field: 'name', headerName: 'Player', flex: 1, renderCell: (params) => {
+                return (
+                    <>
+                        <img src={"https://api.hyperlandsmc.net/head/" + params.value} alt={params.value} className="me-2" />
+                        <span>{params.value}</span>
+                    </>
+                )
+            }
+        },
         { field: 'score', headerName: 'Score', flex: 0.5 },
     ];
 
@@ -25,7 +34,7 @@ const Leaderboard = ({ leaderboards, data, title }) => {
         if (leaderboards && leaderboards.length > 0) {
             let testRows = [];
             let i = 1;
-            leaderboards.find((x) => x.id === id).data.forEach(row => {
+            leaderboards.find((x) => x.id === id).data.slice(0, 100).forEach(row => {
                 testRows.push({
                     id: i,
                     name: row[0],
