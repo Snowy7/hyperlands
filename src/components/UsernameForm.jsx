@@ -8,6 +8,11 @@ const UsernameForm = ({
     isLoading,
     inputRef,
 }) => {
+    const _handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            showStats();
+        }
+    }
     return (
         <div className="usernameForm_container">
             <div className="usernameForm">
@@ -27,6 +32,7 @@ const UsernameForm = ({
                         id="username"
                         placeholder="Enter a username"
                         onChange={(e) => setUsername(e.target.value)}
+
                     />
                 </form>
                 <div className="form-footer">

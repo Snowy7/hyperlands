@@ -1,19 +1,14 @@
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from '@mui/material/styles';
-import {
-    AppBar,
-    Typography,
-    InputBase,
-    Toolbar,
-    Menu,
-    MenuItem,
-    Button,
-} from "@mui/material";
+import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from "react-bootstrap";
 import logo from "../images/logo2.png";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 
-export default function Header() {
+export default function Header({ stats, username, setUsername, leaderboards }) {
+    const navigate = useNavigate();
+    const location = useLocation();
     const Search = styled('div')(({ theme }) => ({
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -27,34 +22,11 @@ export default function Header() {
             marginLeft: theme.spacing(1),
             width: 'auto',
         },
+
     }));
 
-    const SearchIconWrapper = styled('div')(({ theme }) => ({
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }));
 
-    const StyledInputBase = styled(InputBase)(({ theme }) => ({
-        color: 'inherit',
-        '& .MuiInputBase-input': {
-            padding: theme.spacing(1, 1, 1, 0),
-            // vertical padding + font size from searchIcon
-            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-            transition: theme.transitions.create('width'),
-            width: '100%',
-            [theme.breakpoints.up('sm')]: {
-                width: '12ch',
-                '&:focus': {
-                    width: '20ch',
-                },
-            },
-        },
-    }));
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -63,59 +35,64 @@ export default function Header() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    return (
-        <AppBar className="blur" position="fixed">
-            <Toolbar>
-                <Typography
-                    variant="h6"
-                    noWrap
-                    component="div"
-                    sx={{ pt: 1, flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                >
-                    <img src={logo} width="166" height="50" alt="logo" />
-                </Typography>
-                <Typography
-                    variant="h6"
-                    noWrap
-                    component="div"
-                    sx={{ pt: 1, flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                >
-                    <Button
-                        id="basic-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        color="text"
-                    >
-                        Leaderboards
-                    </Button>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                        color="text"
 
+
+    return (
+        <Navbar className="bg-dark" variant="dark" expand="lg" fixed="top" >
+            <Container fluid>
+                <Navbar.Brand style={{ cursor: "pointer" }} onClick={() => {
+                    navigate('/');
+                }}>
+                    <img src={logo} width="143" height="50" />
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="navbarScroll" />
+                <Navbar.Collapse id="navbarScroll">
+                    <Nav
+                        className="mx-auto my-2 my-lg-0"
+                        style={{ maxHeight: '100px' }}
+                        navbarScroll
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
-                    </Menu>
-                </Typography>
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Enter a username"
-                        inputProps={{ 'aria-label': 'username' }}
-                    />
-                </Search>
-            </Toolbar>
-        </AppBar>
+                        <NavDropdown title="Leaderboards" id="navbarScrollingDropdown">
+                            {leaderboards ? [
+
+                                leaderboards.map((leaderboard, index) => (
+                                    <NavDropdown.Item key={index} onClick={() => {
+                                        navigate(`/leaderboards/${leaderboard.id}`);
+                                    }}>
+                                        {leaderboard.name}
+                                    </NavDropdown.Item>
+
+                                ))
+
+                            ] : <NavDropdown.Item>Loading....</NavDropdown.Item>
+                            }
+                        </NavDropdown>
+                    </Nav>
+                    <Form className="d-flex" onSubmit={
+                        (e) => {
+                            e.preventDefault();
+                            navigate(`/stats/${username}`);
+                        }
+                    }>
+                        <FormControl
+                            type="search"
+                            placeholder="Search"
+                            className="me-2"
+                            aria-label="Search"
+                            value={username}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    navigate(`/stats/${username}`);
+                                }
+                            }}
+                        />
+                        <Button variant="outline-info">Search</Button>
+                    </Form>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar >
     );
 }
