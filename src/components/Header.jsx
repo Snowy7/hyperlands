@@ -9,33 +9,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 export default function Header({ stats, username, setUsername, leaderboards }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const Search = styled('div')(({ theme }) => ({
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: alpha(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: alpha(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-
-    }));
-
-
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
 
     return (
         <Navbar className="bg-dark" variant="dark" expand="lg" fixed="top" >
@@ -68,29 +41,31 @@ export default function Header({ stats, username, setUsername, leaderboards }) {
                             }
                         </NavDropdown>
                     </Nav>
-                    <Form className="d-flex" onSubmit={
-                        (e) => {
-                            e.preventDefault();
-                            navigate(`/stats/${username}`);
-                        }
-                    }>
-                        <FormControl
-                            type="search"
-                            placeholder="Search"
-                            className="me-2"
-                            aria-label="Search"
-                            value={username}
-                            onChange={(e) => {
-                                setUsername(e.target.value);
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    navigate(`/stats/${username}`);
-                                }
-                            }}
-                        />
-                        <Button variant="outline-info">Search</Button>
-                    </Form>
+                    {location.pathname !== '/' && (
+                        <Form className="d-flex" onSubmit={
+                            (e) => {
+                                e.preventDefault();
+                                navigate(`/stats/${username}`);
+                            }
+                        }>
+                            <FormControl
+                                type="search"
+                                placeholder="Search"
+                                className="me-2"
+                                aria-label="Search"
+                                value={username}
+                                onChange={(e) => {
+                                    setUsername(e.target.value);
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        navigate(`/stats/${username}`);
+                                    }
+                                }}
+                            />
+                            <Button variant="outline-info">Search</Button>
+                        </Form>
+                    )}
                 </Navbar.Collapse>
             </Container>
         </Navbar >
